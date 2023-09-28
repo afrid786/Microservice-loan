@@ -6,15 +6,18 @@ import com.afrid.loan.dto.LoanUpdateDTO;
 import com.afrid.loan.dto.ResponseDTO;
 import com.afrid.loan.loanConstants.LoanConstants;
 import com.afrid.loan.service.ILoanService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api/v1",produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
+@Validated
 public class LoansController {
 
     ILoanService iLoanService;
@@ -27,7 +30,7 @@ public class LoansController {
     }
 
     @PostMapping("/createLoan")
-    public ResponseEntity<ResponseDTO> createLoan (@RequestBody LoanRequestDTO loanRequestDTO) {
+    public ResponseEntity<ResponseDTO> createLoan (@Valid @RequestBody LoanRequestDTO loanRequestDTO) {
         boolean loanCreated = iLoanService.createLoan(loanRequestDTO);
         if(loanCreated) {
           return   ResponseEntity.status(HttpStatus.CREATED)
@@ -40,7 +43,8 @@ public class LoansController {
     }
 
     @PutMapping("/updateLoan")
-    public ResponseEntity<ResponseDTO> updateLoanDetails (@RequestParam String mobileNumber, @RequestBody LoanUpdateDTO loanUpdateDTO) {
+    public ResponseEntity<ResponseDTO> updateLoanDetails (@Valid @RequestParam String mobileNumber,
+                                                          @Valid @RequestBody LoanUpdateDTO loanUpdateDTO) {
         boolean isLoanUpdated = iLoanService.updateLoanDetails(mobileNumber, loanUpdateDTO);
         if(isLoanUpdated) {
             return ResponseEntity.status(HttpStatus.OK)
