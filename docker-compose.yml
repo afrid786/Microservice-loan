@@ -1,0 +1,38 @@
+services:
+  bankaccount:
+    image: "afrid98/bankms:latest"
+    container_name: bank-ms
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - afrid-network
+  loan:
+      image: "afrid98/loanms:latest"
+      container_name: loan-ms
+      ports:
+        - "9000:8081"
+      deploy:
+        resources:
+          limits:
+            memory: 700m
+      networks:
+        - afrid-network
+  card:
+    image: "afrid98/cardsms:latest"
+    container_name: card-ms
+    ports:
+      - "9005:8083"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - afrid-network
+
+networks:
+  afrid-network:
+    driver: "bridge"
