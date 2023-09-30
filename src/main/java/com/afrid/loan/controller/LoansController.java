@@ -1,13 +1,13 @@
 package com.afrid.loan.controller;
 
-import com.afrid.loan.dto.LoanDTO;
-import com.afrid.loan.dto.LoanRequestDTO;
-import com.afrid.loan.dto.LoanUpdateDTO;
-import com.afrid.loan.dto.ResponseDTO;
+import com.afrid.loan.dto.*;
 import com.afrid.loan.loanConstants.LoanConstants;
 import com.afrid.loan.service.ILoanService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +16,26 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api/v1",produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
 @Validated
 public class LoansController {
 
-    ILoanService iLoanService;
+
+    private final ILoanService iLoanService;
+
+    @Value("${build.version}")
+    private String buildVersion;
+
+
+    @Autowired
+    private Environment environment;
+
+    public LoansController(ILoanService iLoanService) {
+        this.iLoanService = iLoanService;
+    }
+
+
+    @Autowired
+    private LoanContactInfo loanContactInfo;
 
     @GetMapping("/loanDetails")
     public ResponseEntity<LoanDTO> getLoanDetails (@RequestParam String mobileNumber) {
@@ -65,5 +80,18 @@ public class LoansController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseDTO(LoanConstants.STATUS_500,LoanConstants.MESSAGE_500));
         }
+    }
+
+
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildVersion () {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(buildVersion);
+    }
+
+    @GetMapping("/java-info")
+    public ResponseEntity<LoanContactInfo> getLoanInfo () {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(loanContactInfo);
     }
 }
