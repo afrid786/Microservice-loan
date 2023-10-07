@@ -6,9 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(
-		value = {LoanContactInfo.class}
-)
+@EnableConfigurationProperties(value = {LoanContactInfo.class})
 public class LoanApplication {
 
 	public static void main(String[] args) {
